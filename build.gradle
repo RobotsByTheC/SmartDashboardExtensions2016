@@ -1,0 +1,51 @@
+import java.nio.file.Files
+import java.nio.file.StandardCopyOption
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+
+repositories {
+  mavenCentral()
+  maven {
+	url = "http://first.wpi.edu/FRC/roborio/maven"
+  }
+}
+
+configurations{
+  compileOnly
+}
+
+sourceSets.main.compileClasspath += configurations.compileOnly
+
+eclipse {
+  classpath {
+    plusConfigurations += [configurations.compileOnly]
+  }
+}
+
+dependencies {
+  compile project(':VisionProcessor2015')
+  compileOnly 'edu.wpi.first.wpilib:SmartDashboard:+'
+}
+
+jar {
+  from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+}
+
+task install(dependsOn: jar) << {
+  File extensionDir
+  if (project.hasProperty('smartdashboard.extensions')) {
+    extensionDir = new File(project.smartdashboard.extensions)
+  } else {
+    extensionDir = new File(System.properties['user.home'], "SmartDashboard/extensions")
+  }
+  
+  if (!extensionDir.exists()) {
+    extensionDir.createNewFile()
+  }
+    
+  println "Installing extension to " + extensionDir
+    
+  // Copy jar to extension directory
+  Files.copy(jar.archivePath.toPath(), extensionDir.toPath().resolve(jar.archivePath.getName()), StandardCopyOption.REPLACE_EXISTING)
+}
