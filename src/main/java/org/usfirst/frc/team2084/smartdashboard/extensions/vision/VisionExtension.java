@@ -11,13 +11,16 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferByte;
+import java.io.File;
+import java.lang.reflect.Field;
 
-import org.opencv.core.Core;
 import org.opencv.core.Mat;
+import org.usfirst.frc.team2084.CMonster2015.vision.ImageConvertor;
+import org.usfirst.frc.team2084.CMonster2015.vision.OpenCVLoader;
 import org.usfirst.frc.team2084.CMonster2015.vision.Range;
 import org.usfirst.frc.team2084.smartdashboard.extensions.vision.properties.RangeProperty;
 
+import edu.wpi.first.smartdashboard.extensions.FileSniffer;
 import edu.wpi.first.smartdashboard.gui.StaticWidget;
 import edu.wpi.first.smartdashboard.properties.DoubleProperty;
 import edu.wpi.first.smartdashboard.properties.Property;
@@ -29,7 +32,14 @@ import edu.wpi.first.smartdashboard.properties.Property;
 public abstract class VisionExtension extends StaticWidget {
 
     static {
-        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+        try {
+            Field libraryDirsField = FileSniffer.class.getDeclaredField("LIBRARY_DIRS");
+            libraryDirsField.setAccessible(true);
+
+            OpenCVLoader.loadOpenCV((File[]) libraryDirsField.get(null));
+        } catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException | UnsatisfiedLinkError e) {
+            System.err.println("Unable to load OpenCV: " + e);
+        }
     }
 
     /**
@@ -50,6 +60,8 @@ public abstract class VisionExtension extends StaticWidget {
      * corrupted.
      */
     private BufferedImage imageToDraw;
+    
+    private final ImageConvertor convertor = new ImageConvertor();
 
     /**
      * This method is called when the SmartDashboard is started or the extension
@@ -58,12 +70,12 @@ public abstract class VisionExtension extends StaticWidget {
     @Override
     public void init() {
         setPreferredSize(new Dimension(500, 500));
-        
+
         propertyChanged(hThreshold);
         propertyChanged(sThreshold);
         propertyChanged(vThreshold);
         propertyChanged(minArea);
-        
+
         revalidate();
         repaint();
     }
@@ -71,33 +83,7 @@ public abstract class VisionExtension extends StaticWidget {
     protected void displayImage(Mat image) {
         synchronized (this) {
             if (image != null) {
-                if (image.elemSize1() == 1) {
-                    int convertedType;
-                    int channels = image.channels();
-                                        
-                    switch (channels) {
-                    case 1:
-                        convertedType = BufferedImage.TYPE_BYTE_GRAY;
-                    break;
-                    case 3:
-                        convertedType = BufferedImage.TYPE_3BYTE_BGR;
-                    break;
-                    default:
-                        convertedType = BufferedImage.TYPE_CUSTOM;
-                    }
-
-                    int width = image.width();
-                    int height = image.height();
-
-                    if (imageToDraw == null ||
-                            width != imageToDraw.getWidth() ||
-                            height != imageToDraw.getHeight()) {
-
-                        imageToDraw = new BufferedImage(width, height, convertedType);
-                    }
-
-                    image.get(0, 0, ((DataBufferByte) imageToDraw.getRaster().getDataBuffer()).getData());
-                }
+                imageToDraw = convertor.toBufferedImage(image);
             } else {
                 imageToDraw = null;
             }
