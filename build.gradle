@@ -24,7 +24,7 @@ eclipse {
 }
 
 dependencies {
-  compile project(':VisionProcessor2015')
+  compile project(':VisionProcessor2016')
   compileOnly 'edu.wpi.first.wpilib:SmartDashboard:+'
 }
 
