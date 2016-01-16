@@ -7,7 +7,7 @@ apply plugin: 'eclipse'
 repositories {
   mavenCentral()
   maven {
-	url = "http://first.wpi.edu/FRC/roborio/maven"
+	url = "http://first.wpi.edu/FRC/roborio/maven/release"
   }
 }
 
