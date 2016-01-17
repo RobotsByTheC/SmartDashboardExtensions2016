@@ -1,33 +1,24 @@
 package org.usfirst.frc.team2084.smartdashboard.extensions.vision;
 
-import org.usfirst.frc.team2084.CMonster2015.vision.Range;
-import org.usfirst.frc.team2084.CMonster2015.vision.HighGoalProcessor;
-import org.usfirst.frc.team2084.CMonster2015.vision.capture.CameraCapture;
+import java.awt.image.BufferedImage;
 
-import edu.wpi.first.smartdashboard.properties.Property;
-import edu.wpi.first.smartdashboard.properties.StringProperty;
+import org.opencv.core.Mat;
+import org.usfirst.frc.team2084.CMonster2015.vision.HighGoalProcessor;
+import org.usfirst.frc.team2084.CMonster2015.vision.ImageConvertor;
 
 @SuppressWarnings("serial")
 public class LocalVisionExtension extends VisionExtension {
 
     public static final String NAME = "Local Vision";
 
-    public final StringProperty cameraURL = new StringProperty(this, "Camera URL", "http://192.168.0.90/mjpg/video.mjpg");
-
-    private CameraCapture capture;
     private HighGoalProcessor processor;
+    
+    private final Mat outImage = new Mat();
+    private final ImageConvertor imageConvertor = new ImageConvertor();
 
     @Override
     public void init() {
-        capture = new CameraCapture(cameraURL.getValue());
-
-        processor = new HighGoalProcessor(capture);
-
-        processor.addImageHandler((image) -> {
-            displayImage(image);
-        });
-
-        processor.start();
+        processor = new HighGoalProcessor(null);
 
         super.init();
     }
@@ -36,15 +27,17 @@ public class LocalVisionExtension extends VisionExtension {
         processor.stop();
     }
 
+    /**
+     * @param image
+     */
     @Override
-    public void propertyChanged(Property p) {
-        if (p == cameraURL) {
-            setCameraURL(cameraURL.getValue());
-        }
+    public void imageUpdated(BufferedImage image) {
+        Mat inputImage = imageConvertor.toMat(image);
+        inputImage.copyTo(outImage);
+        processor.process(inputImage, outImage);
+        
+        BufferedImage outImageJava = imageConvertor.toBufferedImage(outImage);
+        outImageJava.copyData(image.getRaster());
     }
-
-    public void setCameraURL(String url) {
-        capture.setFilename(url);
-    }
-
+    
 }
