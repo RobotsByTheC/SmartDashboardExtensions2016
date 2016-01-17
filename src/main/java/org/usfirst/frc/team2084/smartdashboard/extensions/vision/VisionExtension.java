@@ -18,9 +18,11 @@ import org.opencv.core.Mat;
 import org.usfirst.frc.team2084.CMonster2015.vision.ImageConvertor;
 import org.usfirst.frc.team2084.CMonster2015.vision.OpenCVLoader;
 import org.usfirst.frc.team2084.CMonster2015.vision.Range;
+import org.usfirst.frc.team2084.CMonster2015.vision.VisionParameters;
 import org.usfirst.frc.team2084.smartdashboard.extensions.vision.properties.RangeProperty;
 
 import edu.wpi.first.smartdashboard.extensions.FileSniffer;
+import edu.wpi.first.smartdashboard.gui.DisplayElement;
 import edu.wpi.first.smartdashboard.gui.StaticWidget;
 import edu.wpi.first.smartdashboard.properties.DoubleProperty;
 import edu.wpi.first.smartdashboard.properties.Property;
@@ -52,6 +54,7 @@ public abstract class VisionExtension extends StaticWidget {
     public final RangeProperty sThreshold = new RangeProperty(this, "S Threshold", COLOR_RANGE);
     public final RangeProperty vThreshold = new RangeProperty(this, "V Threshold", COLOR_RANGE);
     public final DoubleProperty minArea = new DoubleProperty(this, "Min Blob Area", 100);
+    public final DoubleProperty approxPolyEpsilon = new DoubleProperty(this, "Approx Poly Epsilon", 10);
 
     /**
      * Image used to transfer data between the processing loop and the UI
@@ -60,7 +63,7 @@ public abstract class VisionExtension extends StaticWidget {
      * corrupted.
      */
     private BufferedImage imageToDraw;
-    
+
     private final ImageConvertor convertor = new ImageConvertor();
 
     /**
@@ -75,6 +78,7 @@ public abstract class VisionExtension extends StaticWidget {
         propertyChanged(sThreshold);
         propertyChanged(vThreshold);
         propertyChanged(minArea);
+        propertyChanged(approxPolyEpsilon);
 
         revalidate();
         repaint();
@@ -91,19 +95,17 @@ public abstract class VisionExtension extends StaticWidget {
         repaint();
     }
 
-    /**
-     * @param arg0
-     */
-    @Override
-    public void propertyChanged(Property p) {
+    public void propertyChanged(Property p) { 
         if (p == hThreshold) {
-            setHThreshold((Range) p.getValue());
+            VisionParameters.setHThreshold(hThreshold.getValue());
         } else if (p == sThreshold) {
-            setSThreshold((Range) p.getValue());
+            VisionParameters.setSThreshold(sThreshold.getValue());
         } else if (p == vThreshold) {
-            setVThreshold((Range) p.getValue());
+            VisionParameters.setVThreshold(vThreshold.getValue());
         } else if (p == minArea) {
-            setMinSize((Double) p.getValue());
+            VisionParameters.setMinBlobArea(minArea.getValue());
+        } else if (p == approxPolyEpsilon) {
+            VisionParameters.setApproxPolyEpsilon(approxPolyEpsilon.getValue());
         }
     }
 
@@ -141,13 +143,5 @@ public abstract class VisionExtension extends StaticWidget {
             }
         }
     }
-
-    public abstract void setHThreshold(Range r);
-
-    public abstract void setSThreshold(Range r);
-
-    public abstract void setVThreshold(Range r);
-
-    public abstract void setMinSize(double size);
 
 }
