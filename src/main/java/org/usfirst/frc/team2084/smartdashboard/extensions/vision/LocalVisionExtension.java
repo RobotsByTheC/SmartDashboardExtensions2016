@@ -23,10 +23,6 @@ public class LocalVisionExtension extends VisionExtension {
         super.init();
     }
 
-    public void disconnect() {
-        processor.stop();
-    }
-
     /**
      * @param image
      */
