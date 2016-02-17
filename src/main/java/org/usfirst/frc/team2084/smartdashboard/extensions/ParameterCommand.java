@@ -3,6 +3,8 @@ package org.usfirst.frc.team2084.smartdashboard.extensions;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -33,14 +35,16 @@ public class ParameterCommand extends AbstractTableWidget {
     public final ColorProperty cancelBackground =
             new ColorProperty(this, "Cancel Button Color", new Color(243, 32, 32));
 
-    private final JPanel commandPanel = new JPanel();
-    private final JLabel name = new JLabel();
-    private final JPanel buttonPanel = new JPanel(buttonPanelLayout = new CardLayout());;
-    private final CardLayout buttonPanelLayout;
-    private final JButton start = new JButton("start");;
-    private final JButton cancel = new JButton("cancel");;
+    private JPanel commandPanel;
+    private JLabel name;
+    private JPanel buttonPanel;
+    private CardLayout buttonPanelLayout;
+    private JButton start;
+    private JButton cancel;
 
-    private final JPanel fieldPanel = new JPanel();
+    private JPanel fieldPanel;
+
+    private Set<String> parameters = new HashSet<>();
 
     /**
      * 
@@ -52,6 +56,14 @@ public class ParameterCommand extends AbstractTableWidget {
     @Override
     public void init() {
         SwingUtilities.invokeLater(() -> {
+            commandPanel = new JPanel();
+            name = new JLabel();
+            buttonPanel = new JPanel(buttonPanelLayout = new CardLayout());
+            start = new JButton("start");
+            cancel = new JButton("cancel");
+
+            fieldPanel = new JPanel();
+
             name.setText(getFieldName());
 
             // setResizable(false);
@@ -115,16 +127,19 @@ public class ParameterCommand extends AbstractTableWidget {
         });
     }
 
+    private boolean addedParameterListener = false;
+
     @Override
     public void tableChanged(ITable source, String key, ITable value, boolean isNew) {
         super.tableChanged(source, key, value, isNew);
 
-        if (key.equals("Parameters") && isNew) {
+        if (key.equals("Parameters") && !addedParameterListener) {
             value.addTableListener((ITable s, String k, Object v, boolean n) -> {
-                if (n) {
+                if (!parameters.contains(k)) {
                     addParameter(s, k, DataType.getType(v));
                 }
             } , true);
+            addedParameterListener = true;
         }
     }
 
