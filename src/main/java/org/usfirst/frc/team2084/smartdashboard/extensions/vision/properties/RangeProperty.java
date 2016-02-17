@@ -15,7 +15,7 @@ import javax.swing.JTable;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 
-import org.usfirst.frc.team2084.CMonster2015.vision.Range;
+import org.usfirst.frc.team2084.CMonster2016.vision.Range;
 
 import edu.wpi.first.smartdashboard.properties.GenericProperty;
 import edu.wpi.first.smartdashboard.properties.PropertyHolder;

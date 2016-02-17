@@ -30,7 +30,8 @@ public class ParameterCommand extends AbstractTableWidget {
     private static final String CANCEL_CARD = "Cancel";
 
     public final ColorProperty startBackground = new ColorProperty(this, "Start Button Color", new Color(32, 134, 32));
-    public final ColorProperty cancelBackground = new ColorProperty(this, "Cancel Button Color", new Color(243, 32, 32));
+    public final ColorProperty cancelBackground =
+            new ColorProperty(this, "Cancel Button Color", new Color(243, 32, 32));
 
     private final JPanel commandPanel = new JPanel();
     private final JLabel name = new JLabel();
@@ -123,7 +124,7 @@ public class ParameterCommand extends AbstractTableWidget {
                 if (n) {
                     addParameter(s, k, DataType.getType(v));
                 }
-            }, true);
+            } , true);
         }
     }
 
@@ -138,13 +139,13 @@ public class ParameterCommand extends AbstractTableWidget {
             text = bnf = new BindableNumberField(new BindableTableEntry(table, field));
             table.addTableListener(field, (source, key, value, isNew) -> {
                 bnf.setBindableValue((double) value);
-            }, true);
+            } , true);
         } else {
             BindableStringField bsf;
             text = bsf = new BindableStringField(new BindableTableEntry(table, field));
             table.addTableListener(field, (source, key, value, isNew) -> {
                 bsf.setBindableValue((String) value);
-            }, true);
+            } , true);
         }
         panel.add(text, BorderLayout.CENTER);
 
@@ -158,7 +159,7 @@ public class ParameterCommand extends AbstractTableWidget {
 
         table.addTableListener(field, (source, key, value, isNew) -> {
             check.setBindableValue((boolean) value);
-        }, true);
+        } , true);
 
         panel.add(label, BorderLayout.WEST);
         panel.add(check, BorderLayout.EAST);

@@ -3,8 +3,8 @@ package org.usfirst.frc.team2084.smartdashboard.extensions.vision;
 import java.awt.image.BufferedImage;
 
 import org.opencv.core.Mat;
-import org.usfirst.frc.team2084.CMonster2015.vision.HighGoalProcessor;
-import org.usfirst.frc.team2084.CMonster2015.vision.ImageConvertor;
+import org.usfirst.frc.team2084.CMonster2016.vision.HighGoalProcessor;
+import org.usfirst.frc.team2084.CMonster2016.vision.ImageConvertor;
 
 @SuppressWarnings("serial")
 public class LocalVisionExtension extends VisionExtension {

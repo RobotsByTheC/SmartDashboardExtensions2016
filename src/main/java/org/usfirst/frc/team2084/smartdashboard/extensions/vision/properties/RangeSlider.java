@@ -8,7 +8,7 @@ package org.usfirst.frc.team2084.smartdashboard.extensions.vision.properties;
 
 import javax.swing.JSlider;
 
-import org.usfirst.frc.team2084.CMonster2015.vision.Range;
+import org.usfirst.frc.team2084.CMonster2016.vision.Range;
 
 /**
  * An extension of JSlider to select a range of values using two thumb controls.

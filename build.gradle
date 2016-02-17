@@ -25,7 +25,7 @@ eclipse {
 
 dependencies {
   compile project(':VisionProcessor2016')
-  compileOnly 'edu.wpi.first.wpilib:SmartDashboard:+'
+  compileOnly files(System.properties['user.home']+'/wpilib/tools/SmartDashboard.jar')
 }
 
 jar {
