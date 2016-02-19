@@ -58,6 +58,7 @@ public abstract class VisionExtension extends MJPEGStreamViewerExtension {
             new DoubleProperty(this, "Approx Poly Epsilon", DEFAULT_APPROX_POLY_EPSILON);
     public final IntegerProperty blurSize = new IntegerProperty(this, "Blur Size", DEFAULT_BLUR_SIZE);
     public final DoubleProperty fovAngle = new DoubleProperty(this, "FOV Angle", Math.toDegrees(DEFAULT_FOV_ANGLE));
+    public final DoubleProperty exposure = new DoubleProperty(this, "Exposure", DEFAULT_EXPOSURE);
 
     /**
      * This method is called when the SmartDashboard is started or the extension
@@ -84,6 +85,7 @@ public abstract class VisionExtension extends MJPEGStreamViewerExtension {
         repaint();
     }
 
+    @Override
     public void propertyChanged(Property p) {
         if (p == hThreshold) {
             setHThreshold(hThreshold.getValue());
@@ -105,6 +107,8 @@ public abstract class VisionExtension extends MJPEGStreamViewerExtension {
             setBlurSize(blurSize.getValue());
         } else if (p == fovAngle) {
             setFOVAngleDegrees(fovAngle.getValue());
+        } else if (p == exposure) {
+            setExposure(exposure.getValue());
         } else {
             super.propertyChanged(p);
         }
