@@ -136,6 +136,7 @@ public class ParameterCommand extends AbstractTableWidget {
         if (key.equals("Parameters") && !addedParameterListener) {
             value.addTableListener((ITable s, String k, Object v, boolean n) -> {
                 if (!parameters.contains(k)) {
+                    parameters.add(k);
                     addParameter(s, k, DataType.getType(v));
                 }
             } , true);
