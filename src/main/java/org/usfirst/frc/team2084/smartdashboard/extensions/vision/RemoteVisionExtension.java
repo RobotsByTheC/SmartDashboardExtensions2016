@@ -13,6 +13,16 @@ public class RemoteVisionExtension extends VisionExtension {
     public final StringProperty cameraSource = new StringProperty(this, "Camera Source", "0");
 
     /**
+     * 
+     */
+    @Override
+    public void init() {
+        propertyChanged(cameraSource);
+
+        super.init();
+    }
+
+    /**
      * @param p
      */
     @Override
