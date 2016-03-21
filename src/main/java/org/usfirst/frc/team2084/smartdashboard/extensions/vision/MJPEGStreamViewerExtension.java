@@ -102,7 +102,7 @@ public class MJPEGStreamViewerExtension extends StaticWidget {
                         imageToDraw = ImageIO.read(tmpStream);
 
                         imageUpdated(imageToDraw);
-                        
+
                         repaint();
                     }
 
@@ -130,7 +130,8 @@ public class MJPEGStreamViewerExtension extends StaticWidget {
 
     private BufferedImage imageToDraw;
     private BGThread bgThread = new BGThread();
-    public final StringProperty ipProperty = new StringProperty(this, "Stream URL", "http://axis-camera.local/mjpg/video.mjpg");
+    public final StringProperty ipProperty =
+            new StringProperty(this, "Stream URL", "http://axis-camera.local/mjpg/video.mjpg");
     public final IntegerProperty rotateProperty = new IntegerProperty(this, "Degrees Rotation", 0);
 
     @Override
@@ -185,8 +186,10 @@ public class MJPEGStreamViewerExtension extends StaticWidget {
             double panelHeight = getBounds().height;
             double panelCenterX = panelWidth / 2.0;
             double panelCenterY = panelHeight / 2.0;
-            double rotatedImageWidth = origImageWidth * Math.abs(Math.cos(rotateAngleRad)) + origImageHeight * Math.abs(Math.sin(rotateAngleRad));
-            double rotatedImageHeight = origImageWidth * Math.abs(Math.sin(rotateAngleRad)) + origImageHeight * Math.abs(Math.cos(rotateAngleRad));
+            double rotatedImageWidth = origImageWidth * Math.abs(Math.cos(rotateAngleRad))
+                    + origImageHeight * Math.abs(Math.sin(rotateAngleRad));
+            double rotatedImageHeight = origImageWidth * Math.abs(Math.sin(rotateAngleRad))
+                    + origImageHeight * Math.abs(Math.cos(rotateAngleRad));
 
             // compute scaling needed
             double scale = Math.min(panelWidth / rotatedImageWidth, panelHeight / rotatedImageHeight);
