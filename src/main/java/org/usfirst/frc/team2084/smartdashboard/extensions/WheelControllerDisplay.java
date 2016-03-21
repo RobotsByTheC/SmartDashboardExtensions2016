@@ -7,6 +7,8 @@
 package org.usfirst.frc.team2084.smartdashboard.extensions;
 
 import java.awt.BorderLayout;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
@@ -36,6 +38,8 @@ public class WheelControllerDisplay extends AbstractTableWidget {
     private final SimpleDial value = new SimpleDial();
 
     private final JPanel fieldPanel = new JPanel();
+
+    private Set<String> displays = new HashSet<>();
 
     @Override
     public void propertyChanged(Property property) {
@@ -76,9 +80,10 @@ public class WheelControllerDisplay extends AbstractTableWidget {
 
     @Override
     public void doubleChanged(ITable source, String key, double value, boolean isNew) {
-        if (isNew && !key.equals(VALUE_FIELD)) {
+        if (!key.equals(VALUE_FIELD) && !displays.contains(key)) {
             TextBox unb = createUneditableNumberBox(key);
             setNumberBinding(key, unb::setValue);
+            displays.add(key);
             SwingUtilities.invokeLater(() -> {
                 fieldPanel.add(unb);
                 revalidate();
