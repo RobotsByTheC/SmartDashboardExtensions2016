@@ -25,7 +25,7 @@ import edu.wpi.first.smartdashboard.properties.Property;
  * @author Ben Wolsieffer
  */
 @SuppressWarnings("serial")
-public abstract class VisionExtension extends MJPEGStreamViewerExtension {
+public abstract class VisionExtension extends UDPStreamViewerExtension {
 
     static {
         try {
