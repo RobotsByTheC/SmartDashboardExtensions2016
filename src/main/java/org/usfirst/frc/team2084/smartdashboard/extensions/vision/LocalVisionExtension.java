@@ -12,7 +12,7 @@ public class LocalVisionExtension extends VisionExtension {
     public static final String NAME = "Local Vision";
 
     private HighGoalProcessor processor;
-    
+
     private final Mat outImage = new Mat();
     private final ImageConvertor imageConvertor = new ImageConvertor();
 
@@ -29,11 +29,10 @@ public class LocalVisionExtension extends VisionExtension {
     @Override
     public void imageUpdated(BufferedImage image) {
         Mat inputImage = imageConvertor.toMat(image);
-        inputImage.copyTo(outImage);
-        processor.process(inputImage, outImage);
-        
+        processor.process(inputImage);
+
         BufferedImage outImageJava = imageConvertor.toBufferedImage(outImage);
         outImageJava.copyData(image.getRaster());
     }
-    
+
 }
