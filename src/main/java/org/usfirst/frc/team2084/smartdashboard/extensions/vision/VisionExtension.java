@@ -44,21 +44,39 @@ public abstract class VisionExtension extends UDPStreamViewerExtension {
     public static final Range COLOR_RANGE = new Range(0, 255);
 
     // Various properties that appear in the properties editor of the extension.
-    public final RangeProperty hThreshold = new RangeProperty(this, "H Threshold", COLOR_RANGE, DEFAULT_H_THRESHOLD);
-    public final RangeProperty sThreshold = new RangeProperty(this, "S Threshold", COLOR_RANGE, DEFAULT_S_THRESHOLD);
-    public final RangeProperty vThreshold = new RangeProperty(this, "V Threshold", COLOR_RANGE, DEFAULT_V_THRESHOLD);
-    public final DoubleProperty minArea = new DoubleProperty(this, "Min Blob Area", DEFAULT_MIN_BLOB_SIZE);
-    public final DoubleProperty minAspectRatioScore =
-            new DoubleProperty(this, "Min Aspect Ratio Score", DEFAULT_MIN_ASPECT_RATIO_SCORE);
-    public final DoubleProperty minRectangularityWidthScore =
-            new DoubleProperty(this, "Min Rect Width Score", DEFAULT_MIN_RECTANGULARITY_WIDTH_SCORE);
-    public final DoubleProperty minRectangularityHeightScore =
-            new DoubleProperty(this, "Min Rect Height Score", DEFAULT_MIN_RECTANGULARITY_HEIGHT_SCORE);
-    public final DoubleProperty approxPolyEpsilon =
-            new DoubleProperty(this, "Approx Poly Epsilon", DEFAULT_APPROX_POLY_EPSILON);
-    public final IntegerProperty blurSize = new IntegerProperty(this, "Blur Size", DEFAULT_BLUR_SIZE);
+    public final RangeProperty goalHThreshold =
+            new RangeProperty(this, "Goal H Threshold", COLOR_RANGE, DEFAULT_GOAL_H_THRESHOLD);
+    public final RangeProperty goalSThreshold =
+            new RangeProperty(this, "Goal S Threshold", COLOR_RANGE, DEFAULT_GOAL_S_THRESHOLD);
+    public final RangeProperty goalVThreshold =
+            new RangeProperty(this, "Goal V Threshold", COLOR_RANGE, DEFAULT_GOAL_V_THRESHOLD);
+    public final DoubleProperty goalMinArea =
+            new DoubleProperty(this, "Goal Min Blob Area", DEFAULT_GOAL_MIN_BLOB_AREA);
+    public final DoubleProperty goalMinAspectRatioScore =
+            new DoubleProperty(this, "Goal Min Aspect Ratio Score", DEFAULT_GOAL_MIN_ASPECT_RATIO_SCORE);
+    public final DoubleProperty goalMinRectangularityWidthScore =
+            new DoubleProperty(this, "Goal Min Rect Width Score", DEFAULT_GOAL_MIN_RECTANGULARITY_WIDTH_SCORE);
+    public final DoubleProperty goalMinRectangularityHeightScore =
+            new DoubleProperty(this, "Goal Min Rect Height Score", DEFAULT_GOAL_MIN_RECTANGULARITY_HEIGHT_SCORE);
+    public final DoubleProperty goalMaxDistance =
+            new DoubleProperty(this, "Goal Max Distance", DEFAULT_GOAL_MAX_DISTANCE);
+    public final DoubleProperty goalMinDistance =
+            new DoubleProperty(this, "Goal Min Distance", DEFAULT_GOAL_MIN_DISTANCE);
+    public final DoubleProperty goalApproxPolyEpsilon =
+            new DoubleProperty(this, "Goal Approx Poly Epsilon", DEFAULT_GOAL_APPROX_POLY_EPSILON);
+    public final IntegerProperty goalBlurSize = new IntegerProperty(this, "Goal Blur Size", DEFAULT_GOAL_BLUR_SIZE);
+    public final DoubleProperty aimingExposure = new DoubleProperty(this, "Aiming Exposure", DEFAULT_AIMING_EXPOSURE);
+
+    public final RangeProperty boulderHThreshold =
+            new RangeProperty(this, "Boulder H Threshold", COLOR_RANGE, DEFAULT_GOAL_H_THRESHOLD);
+    public final RangeProperty boulderSThreshold =
+            new RangeProperty(this, "Boulder S Threshold", COLOR_RANGE, DEFAULT_GOAL_S_THRESHOLD);
+    public final RangeProperty boulderVThreshold =
+            new RangeProperty(this, "Boulder V Threshold", COLOR_RANGE, DEFAULT_GOAL_V_THRESHOLD);
+    public final DoubleProperty boulderMinBlobArea =
+            new DoubleProperty(this, "Boulder Min Blob Area", DEFAULT_GOAL_MIN_BLOB_AREA);
+
     public final DoubleProperty fovAngle = new DoubleProperty(this, "FOV Angle", Math.toDegrees(DEFAULT_FOV_ANGLE));
-    public final DoubleProperty exposure = new DoubleProperty(this, "Exposure", DEFAULT_EXPOSURE);
     public final IntegerProperty streamQuality = new IntegerProperty(this, "Stream Quality", DEFAULT_STREAM_QUALITY);
 
     /**
@@ -69,17 +87,25 @@ public abstract class VisionExtension extends UDPStreamViewerExtension {
     public void init() {
         setPreferredSize(new Dimension(500, 500));
 
-        propertyChanged(hThreshold);
-        propertyChanged(sThreshold);
-        propertyChanged(vThreshold);
-        propertyChanged(minArea);
-        propertyChanged(minAspectRatioScore);
-        propertyChanged(minRectangularityWidthScore);
-        propertyChanged(minRectangularityHeightScore);
-        propertyChanged(approxPolyEpsilon);
-        propertyChanged(blurSize);
+        propertyChanged(goalHThreshold);
+        propertyChanged(goalSThreshold);
+        propertyChanged(goalVThreshold);
+        propertyChanged(goalMinArea);
+        propertyChanged(goalMinAspectRatioScore);
+        propertyChanged(goalMinRectangularityWidthScore);
+        propertyChanged(goalMinRectangularityHeightScore);
+        propertyChanged(goalMaxDistance);
+        propertyChanged(goalMinDistance);
+        propertyChanged(goalApproxPolyEpsilon);
+        propertyChanged(goalBlurSize);
+        propertyChanged(aimingExposure);
+
+        propertyChanged(boulderHThreshold);
+        propertyChanged(boulderSThreshold);
+        propertyChanged(boulderVThreshold);
+        propertyChanged(boulderMinBlobArea);
+
         propertyChanged(fovAngle);
-        propertyChanged(exposure);
         propertyChanged(streamQuality);
 
         super.init();
@@ -90,28 +116,45 @@ public abstract class VisionExtension extends UDPStreamViewerExtension {
 
     @Override
     public void propertyChanged(Property p) {
-        if (p == hThreshold) {
-            setHThreshold(hThreshold.getValue());
-        } else if (p == sThreshold) {
-            setSThreshold(sThreshold.getValue());
-        } else if (p == vThreshold) {
-            setVThreshold(vThreshold.getValue());
-        } else if (p == minArea) {
-            setMinBlobArea(minArea.getValue());
-        } else if (p == minAspectRatioScore) {
-            setMinAspectRatioScore(minAspectRatioScore.getValue());
-        } else if (p == minRectangularityWidthScore) {
-            setMinAspectRatioScore(minRectangularityWidthScore.getValue());
-        } else if (p == minRectangularityHeightScore) {
-            setMinAspectRatioScore(minRectangularityHeightScore.getValue());
-        } else if (p == approxPolyEpsilon) {
-            setApproxPolyEpsilon(approxPolyEpsilon.getValue());
-        } else if (p == blurSize) {
-            setBlurSize(blurSize.getValue());
-        } else if (p == fovAngle) {
+        ////////////////////////////////////////// Goal parameters
+        if (p == goalHThreshold) {
+            setGoalHThreshold(goalHThreshold.getValue());
+        } else if (p == goalSThreshold) {
+            setGoalSThreshold(goalSThreshold.getValue());
+        } else if (p == goalVThreshold) {
+            setGoalVThreshold(goalVThreshold.getValue());
+        } else if (p == goalMinArea) {
+            setGoalMinBlobArea(goalMinArea.getValue());
+        } else if (p == goalMinAspectRatioScore) {
+            setGoalMinAspectRatioScore(goalMinAspectRatioScore.getValue());
+        } else if (p == goalMinRectangularityWidthScore) {
+            setGoalMinAspectRatioScore(goalMinRectangularityWidthScore.getValue());
+        } else if (p == goalMinRectangularityHeightScore) {
+            setGoalMinAspectRatioScore(goalMinRectangularityHeightScore.getValue());
+        } else if (p == goalMaxDistance) {
+            setGoalMaxDistance(goalMaxDistance.getValue());
+        } else if (p == goalMinDistance) {
+            setGoalMinDistance(goalMinDistance.getValue());
+        } else if (p == goalApproxPolyEpsilon) {
+            setApproxPolyEpsilon(goalApproxPolyEpsilon.getValue());
+        } else if (p == goalBlurSize) {
+            setGoalBlurSize(goalBlurSize.getValue());
+        } else if (p == aimingExposure) {
+            setAimingExposure(aimingExposure.getValue());
+        }
+        ////////////////////////////////////////// Boulder parameters
+        else if (p == boulderHThreshold) {
+            setBoulderHThreshold(boulderHThreshold.getValue());
+        } else if (p == boulderSThreshold) {
+            setBoulderSThreshold(boulderSThreshold.getValue());
+        } else if (p == boulderVThreshold) {
+            setBoulderVThreshold(boulderVThreshold.getValue());
+        } else if (p == boulderMinBlobArea) {
+            setBoulderMinBlobArea(boulderMinBlobArea.getValue());
+        }
+        ////////////////////////////////////////// General parameters
+        else if (p == fovAngle) {
             setFOVAngleDegrees(fovAngle.getValue());
-        } else if (p == exposure) {
-            setExposure(exposure.getValue());
         } else if (p == streamQuality) {
             setStreamQuality(streamQuality.getValue());
         } else {
