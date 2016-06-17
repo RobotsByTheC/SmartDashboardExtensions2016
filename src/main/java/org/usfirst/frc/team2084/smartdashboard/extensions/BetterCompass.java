@@ -1,3 +1,9 @@
+/* 
+ * Copyright (c) 2016 RobotsByTheC. All rights reserved.
+ *
+ * Open Source Software - may be modified and shared by FRC teams. The code must
+ * be accompanied by the BSD license file in the root directory of the project.
+ */
 package org.usfirst.frc.team2084.smartdashboard.extensions;
 
 import java.awt.BorderLayout;
@@ -19,6 +25,7 @@ import edu.wpi.first.smartdashboard.properties.Property;
 import edu.wpi.first.smartdashboard.types.DataType;
 
 /**
+ * Compass widget that works better than the default one.
  *
  * @author Ben Wolsieffer
  */
@@ -82,9 +89,9 @@ public class BetterCompass extends AbstractNumberDatasetWidget implements Number
             compass.setRevolutionDistance(circumference.getValue());
         } else if (property == ringColor) {
             compass.setRosePaint(ringColor.getValue());
-        }// else if (property == needleType) {
-         // compass.setSeriesNeedle((int) needleType.getValue());
-         // }
+        } // else if (property == needleType) {
+          // compass.setSeriesNeedle((int) needleType.getValue());
+          // }
     }
 
     @Override

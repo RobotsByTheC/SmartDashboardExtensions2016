@@ -1,5 +1,5 @@
 /* 
- * Copyright (c) 2015 RobotsByTheC. All rights reserved.
+ * Copyright (c) 2016 RobotsByTheC. All rights reserved.
  *
  * Open Source Software - may be modified and shared by FRC teams. The code must
  * be accompanied by the BSD license file in the root directory of the project.
@@ -24,6 +24,9 @@ import edu.wpi.first.smartdashboard.types.DataType;
 import edu.wpi.first.wpilibj.tables.ITable;
 
 /**
+ * Display for a wheel controller. It displays the output on a dial, and other
+ * values as text fields.
+ * 
  * @author Ben Wolsieffer
  */
 @SuppressWarnings("serial")

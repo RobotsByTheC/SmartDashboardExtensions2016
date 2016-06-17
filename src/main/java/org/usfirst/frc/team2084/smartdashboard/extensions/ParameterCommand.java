@@ -1,3 +1,9 @@
+/* 
+ * Copyright (c) 2016 RobotsByTheC. All rights reserved.
+ *
+ * Open Source Software - may be modified and shared by FRC teams. The code must
+ * be accompanied by the BSD license file in the root directory of the project.
+ */
 package org.usfirst.frc.team2084.smartdashboard.extensions;
 
 import java.awt.BorderLayout;
@@ -20,6 +26,8 @@ import edu.wpi.first.smartdashboard.types.DataType;
 import edu.wpi.first.wpilibj.tables.ITable;
 
 /**
+ * Command that can have a set of parameters that can be changed on the
+ * SmartDashboard.
  *
  * @author Ben Wolsieffer
  * @author Jeff Copeland
@@ -139,7 +147,7 @@ public class ParameterCommand extends AbstractTableWidget {
                     parameters.add(k);
                     addParameter(s, k, DataType.getType(v));
                 }
-            } , true);
+            }, true);
             addedParameterListener = true;
         }
     }
@@ -155,13 +163,13 @@ public class ParameterCommand extends AbstractTableWidget {
             text = bnf = new BindableNumberField(new BindableTableEntry(table, field));
             table.addTableListener(field, (source, key, value, isNew) -> {
                 bnf.setBindableValue((double) value);
-            } , true);
+            }, true);
         } else {
             BindableStringField bsf;
             text = bsf = new BindableStringField(new BindableTableEntry(table, field));
             table.addTableListener(field, (source, key, value, isNew) -> {
                 bsf.setBindableValue((String) value);
-            } , true);
+            }, true);
         }
         panel.add(text, BorderLayout.CENTER);
 
@@ -175,7 +183,7 @@ public class ParameterCommand extends AbstractTableWidget {
 
         table.addTableListener(field, (source, key, value, isNew) -> {
             check.setBindableValue((boolean) value);
-        } , true);
+        }, true);
 
         panel.add(label, BorderLayout.WEST);
         panel.add(check, BorderLayout.EAST);
